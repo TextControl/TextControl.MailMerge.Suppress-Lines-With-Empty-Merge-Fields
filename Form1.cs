@@ -39,7 +39,10 @@ namespace tx_emptylines
             report.country = "United States";
 
             reports.Add(report);
-            
+
+            // keep empty fields so they can be processed later on
+            mailMerge1.RemoveEmptyFields = false;
+
             // merge the template with data
             serverTextControl1.Create();
             mailMerge1.MergeObjects(reports);
@@ -60,7 +63,7 @@ namespace tx_emptylines
                 foreach (ApplicationField field in obj.ApplicationFields)
                 {
                     // check, if character next to empty field is a carriage return
-                    if (obj.TextChars[field.Start + field.Length].Char == '\r')
+                    if (obj.TextChars[field.Start + field.Length].Char == '\n')
                     {
                         bool bCompleteLine =
                             (field.Start == obj.Lines.GetItem(field.Start).Start)
