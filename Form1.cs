@@ -48,7 +48,13 @@ namespace tx_emptylines
             mailMerge1.MergeObjects(reports);
 
             // remove empty lines
-            RemoveEmptyFieldLines();
+            bool bMoreLines = true;
+
+            do
+            {
+               bMoreLines = RemoveEmptyFieldLines();
+            }
+            while (bMoreLines == true);
 
             // visualize the resulting document
             byte[] data;
@@ -56,7 +62,7 @@ namespace tx_emptylines
             textControl1.Load(data, BinaryStreamType.InternalUnicodeFormat);
         }
 
-        private void RemoveEmptyFieldLines()
+        private bool RemoveEmptyFieldLines()
         {
             foreach (IFormattedText obj in serverTextControl1.TextParts)
             {
@@ -82,12 +88,14 @@ namespace tx_emptylines
                         }
 
                         // call RemoveEmptyFieldLines recursively
-                        RemoveEmptyFieldLines();
+                        return true;
                     }
                     else
                         field.Text = "";
                 }
             }
+
+            return false;
         }
 
         private void Form1_Load(object sender, EventArgs e)
